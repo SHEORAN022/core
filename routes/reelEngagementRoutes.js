@@ -10,27 +10,38 @@
 //     "../middleware/userAuth"
 //   );
 
+// // const {
+
+// //   addView,
+
+// //   toggleLike,
+
+// //   addComment,
+
+// //   toggleSave,
+
+// //   addShare,
+
+// //   fetchComments,
+
+// //   fetchReelStats,
+
+// // } = require(
+
+// //   "../controllers/reelEngagementController"
+
+// // );
+
 // const {
-
 //   addView,
-
-//   toggleLike,
-
+//   likeReel,
+//   unlikeReel,
 //   addComment,
-
 //   toggleSave,
-
 //   addShare,
-
 //   fetchComments,
-
 //   fetchReelStats,
-
-// } = require(
-
-//   "../controllers/reelEngagementController"
-
-// );
+// } = require("../controllers/reelEngagementController");
 
 
 
@@ -54,16 +65,29 @@
 // // LIKE / UNLIKE
 // // ======================================
 
+// // router.post(
+
+// //   "/like/:reelId",
+
+// //   userAuth,
+
+// //   toggleLike
+
+// // );
+
+// // LIKE
 // router.post(
-
 //   "/like/:reelId",
-
 //   userAuth,
-
-//   toggleLike
-
+//   likeReel
 // );
 
+// // UNLIKE
+// router.delete(
+//   "/unlike/:reelId",
+//   userAuth,
+//   unlikeReel
+// );
 
 
 // // ======================================
@@ -192,6 +216,7 @@ const {
   addShare,
   fetchComments,
   fetchReelStats,
+    downloadReel,
 } = require("../controllers/reelEngagementController");
 
 
@@ -208,6 +233,11 @@ router.post(
 
   addView
 
+);
+router.get(
+  "/download/:reelId",
+  userAuth,
+  downloadReel
 );
 
 
