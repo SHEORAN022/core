@@ -239,8 +239,18 @@ connectDB();
 // MIDDLEWARE
 // ========================================
 
-app.use(cors());
-
+// app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://lavender-hare-239108.hostingersite.com",
+      "http://localhost:3000",
+      "http://localhost:5173",
+       "http://localhost:3001",
+    ],
+    credentials: true
+  })
+);
 app.use(express.json());
 
 app.use(
