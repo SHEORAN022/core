@@ -254,148 +254,233 @@
 
 
 
-// // ======================================
-// // TOGGLE LIKE
-// // ======================================
 
-// exports.toggleLike =
-//   async (req, res) => {
 
-//     try {
+// // exports.toggleLike =
+// //   async (req, res) => {
 
-//       const reel_id =
-//         req.params.reelId;
+// //     try {
 
-//       const user_id =
-//         req.user._id;
+// //       const reel_id =
+// //         req.params.reelId;
 
+// //       const user_id =
+// //         req.user._id;
 
 
-//       const existing =
-//         await ReelEngagement.findOne({
 
-//           reel_id,
+// //       const existing =
+// //         await ReelEngagement.findOne({
 
-//           user_id,
+// //           reel_id,
 
-//           type: "like",
+// //           user_id,
 
-//           is_deleted: false,
+// //           type: "like",
 
-//         });
+// //           is_deleted: false,
 
+// //         });
 
 
-//       // ======================================
-//       // UNLIKE
-//       // ======================================
 
-//       if (existing) {
+// //       // ======================================
+// //       // UNLIKE
+// //       // ======================================
 
-//         existing.is_deleted =
-//           true;
+// //       if (existing) {
 
-//         await existing.save();
+// //         existing.is_deleted =
+// //           true;
 
+// //         await existing.save();
 
 
-//         await Reel.findByIdAndUpdate(
 
-//           reel_id,
+// //         await Reel.findByIdAndUpdate(
 
-//           {
+// //           reel_id,
 
-//             $inc: {
+// //           {
 
-//               total_likes: -1,
+// //             $inc: {
 
-//             },
+// //               total_likes: -1,
 
-//           }
+// //             },
 
-//         );
+// //           }
 
+// //         );
 
 
-//         return res.status(200).json({
 
-//           success: true,
+// //         return res.status(200).json({
 
-//           liked: false,
+// //           success: true,
 
-//           message:
-//             "Reel unliked",
+// //           liked: false,
 
-//         });
+// //           message:
+// //             "Reel unliked",
 
-//       }
+// //         });
 
+// //       }
 
 
-//       // ======================================
-//       // LIKE
-//       // ======================================
 
-//       await ReelEngagement.create({
+// //       // ======================================
+// //       // LIKE
+// //       // ======================================
 
-//         reel_id,
+// //       await ReelEngagement.create({
 
-//         user_id,
+// //         reel_id,
 
-//         type: "like",
+// //         user_id,
 
-//       });
+// //         type: "like",
 
+// //       });
 
 
-//       await Reel.findByIdAndUpdate(
 
-//         reel_id,
+// //       await Reel.findByIdAndUpdate(
 
-//         {
+// //         reel_id,
 
-//           $inc: {
+// //         {
 
-//             total_likes: 1,
+// //           $inc: {
 
-//           },
+// //             total_likes: 1,
 
-//         }
+// //           },
 
-//       );
+// //         }
 
+// //       );
 
 
-//       res.status(201).json({
 
-//         success: true,
+// //       res.status(201).json({
 
-//         liked: true,
+// //         success: true,
 
-//         message:
-//           "Reel liked",
+// //         liked: true,
 
-//       });
+// //         message:
+// //           "Reel liked",
 
-//     } catch (error) {
+// //       });
 
-//       console.log(error);
+// //     } catch (error) {
 
+// //       console.log(error);
 
 
-//       res.status(500).json({
 
+// //       res.status(500).json({
+
+// //         success: false,
+
+// //         message:
+// //           error.message,
+
+// //       });
+
+// //     }
+
+// //   };
+
+// exports.likeReel = async (req, res) => {
+//   try {
+//     const reel_id = req.params.reelId;
+//     const user_id = req.user._id;
+
+//     const existingLike = await ReelEngagement.findOne({
+//       reel_id,
+//       user_id,
+//       type: "like",
+//       is_deleted: false,
+//     });
+
+//     if (existingLike) {
+//       return res.status(400).json({
 //         success: false,
-
-//         message:
-//           error.message,
-
+//         message: "Already liked",
 //       });
-
 //     }
 
-//   };
+//     await ReelEngagement.create({
+//       reel_id,
+//       user_id,
+//       type: "like",
+//     });
 
+//     await Reel.findByIdAndUpdate(reel_id, {
+//       $inc: {
+//         total_likes: 1,
+//       },
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Reel liked successfully",
+//     });
+
+//   } catch (error) {
+//     console.log(error);
+
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+// exports.unlikeReel = async (req, res) => {
+//   try {
+//     const reel_id = req.params.reelId;
+//     const user_id = req.user._id;
+
+//     const like = await ReelEngagement.findOne({
+//       reel_id,
+//       user_id,
+//       type: "like",
+//       is_deleted: false,
+//     });
+
+//     if (!like) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Like not found",
+//       });
+//     }
+
+//     like.is_deleted = true;
+//     await like.save();
+
+//     await Reel.findByIdAndUpdate(reel_id, {
+//       $inc: {
+//         total_likes: -1,
+//       },
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Reel unliked successfully",
+//     });
+
+//   } catch (error) {
+//     console.log(error);
+
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
 
 
 // // ======================================
@@ -889,7 +974,6 @@
 //     }
 
 //   };
-
 
 
 const Reel =
@@ -1867,5 +1951,77 @@ exports.fetchReelStats =
     }
 
   };
+exports.downloadReel = async (req, res) => {
+  try {
+    const reel_id = req.params.reelId;
+    const user_id = req.user?._id || null;
 
+    // ======================================
+    // CHECK REEL
+    // ======================================
 
+    const reel = await Reel.findById(reel_id);
+
+    if (!reel) {
+      return res.status(404).json({
+        success: false,
+        message: "Reel not found",
+      });
+    }
+
+    // ======================================
+    // SAVE DOWNLOAD ENGAGEMENT
+    // ======================================
+
+    await ReelEngagement.create({
+      reel_id,
+      user_id,
+      type: "download",
+    });
+
+    // ======================================
+    // UPDATE DOWNLOAD COUNT
+    // ======================================
+
+    await Reel.findByIdAndUpdate(
+      reel_id,
+      {
+        $inc: {
+          total_downloads: 1,
+        },
+      }
+    );
+
+    // ======================================
+    // GET DOWNLOAD URL
+    // ======================================
+
+    const downloadUrl =
+      reel.video_url ||
+      reel.source_video_url ||
+      reel.hls_master_url ||
+      "";
+
+    // ======================================
+    // RESPONSE
+    // ======================================
+
+    res.status(200).json({
+      success: true,
+      message: "Download tracked successfully",
+      reel_id: reel._id,
+      title: reel.title,
+      download_url: downloadUrl,
+      total_downloads:
+        (reel.total_downloads || 0) + 1,
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
