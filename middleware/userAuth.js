@@ -1,7 +1,16 @@
-// const jwt = require("jsonwebtoken");
+
+// const jwt =
+//   require("jsonwebtoken");
+
+// const User =
+//   require("../models/User");
 
 // const userAuth =
-//   async (req, res, next) => {
+//   async (
+//     req,
+//     res,
+//     next
+//   ) => {
 
 //     try {
 
@@ -13,8 +22,13 @@
 //       // ======================
 
 //       if (
+
 //         !token ||
-//         !token.startsWith("Bearer")
+
+//         !token.startsWith(
+//           "Bearer"
+//         )
+
 //       ) {
 
 //         return res.status(401).json({
@@ -41,15 +55,41 @@
 
 //       const decoded =
 //         jwt.verify(
+
 //           token,
+
 //           process.env.JWT_SECRET
+
 //         );
+
+//       // ======================
+//       // CHECK USER
+//       // ======================
+
+//       const user =
+//         await User.findById(
+//           decoded.id
+//         ).select("-password");
+
+//       if (!user) {
+
+//         return res.status(404).json({
+
+//           success: false,
+
+//           message:
+//             "User not found",
+
+//         });
+
+//       }
 
 //       // ======================
 //       // SAVE USER
 //       // ======================
 
-//       req.user = decoded;
+//       req.user =
+//         user;
 
 //       next();
 
@@ -91,6 +131,11 @@ const userAuth =
       let token =
         req.headers.authorization;
 
+      console.log(
+        "AUTH HEADER =>",
+        req.headers.authorization
+      );
+
       // ======================
       // CHECK TOKEN
       // ======================
@@ -100,7 +145,7 @@ const userAuth =
         !token ||
 
         !token.startsWith(
-          "Bearer"
+          "Bearer "
         )
 
       ) {
@@ -123,6 +168,11 @@ const userAuth =
       token =
         token.split(" ")[1];
 
+      console.log(
+        "TOKEN =>",
+        token
+      );
+
       // ======================
       // VERIFY TOKEN
       // ======================
@@ -135,6 +185,11 @@ const userAuth =
           process.env.JWT_SECRET
 
         );
+
+      console.log(
+        "DECODED =>",
+        decoded
+      );
 
       // ======================
       // CHECK USER

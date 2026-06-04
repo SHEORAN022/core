@@ -6,31 +6,41 @@ const router =
 
 const {
 
-  createQuestion,
-  getQuestionsByTest,
-  deleteQuestion,
+  upsertQuestion,
+
+  fetchQuestions,
+
+  fetchQuestionsForAssessment,
+
+  softDeleteQuestion,
 
 } = require(
   "../controllers/questionController"
 );
 
-// ===============================
-// QUESTION ROUTES
-// ===============================
-
 router.post(
-  "/create",
-  createQuestion
+  "/",
+  upsertQuestion
+);
+
+router.put(
+  "/:id",
+  upsertQuestion
 );
 
 router.get(
-  "/test/:testId",
-  getQuestionsByTest
+  "/",
+  fetchQuestions
+);
+
+router.get(
+  "/assessment/:assessmentId",
+  fetchQuestionsForAssessment
 );
 
 router.delete(
-  "/delete/:id",
-  deleteQuestion
+  "/:id",
+  softDeleteQuestion
 );
 
 module.exports =

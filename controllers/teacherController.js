@@ -1,297 +1,46 @@
-// const Teacher =
-//   require("../models/Teacher");
+// const Teacher = require("../models/teacherModel");
+
+// exports.createTeacher = async (req, res) => {
+//   try {
+//     const teacher = await Teacher.create(req.body);
+
+//     res.status(201).json({
+//       success: true,
+//       teacher,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// exports.getTeachers = async (req, res) => {
+//   try {
+//     const teachers = await Teacher.find();
+
+//     res.json({
+//       success: true,
+//       teachers,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
 
-// // =================================
-// // CREATE TEACHER
-// // =================================
-
-// exports.createTeacher =
-//   async (req, res) => {
-
-//     try {
-
-//       const teacher =
-//         await Teacher.create({
-
-//           teacherName:
-//             req.body.teacherName,
-
-//           email:
-//             req.body.email,
-
-//           phone:
-//             req.body.phone,
-
-//           profileImage:
-//             req.body.profileImage,
-
-//           qualification:
-//             req.body.qualification,
-
-//           experience:
-//             req.body.experience,
-
-//           description:
-//             req.body.description,
-
-//           subjects:
-//             req.body.subjects,
-
-//           status:
-//             req.body.status,
-
-//         });
-
-//       res.status(201).json({
-
-//         success: true,
-
-//         message:
-//           "Teacher Added Successfully",
-
-//         data:
-//           teacher,
-
-//       });
-
-//     } catch (error) {
-
-//       console.log(error);
-
-//       res.status(500).json({
-
-//         success: false,
-
-//         message:
-//           error.message,
-
-//       });
-
-//     }
-
-//   };
-
-// // =================================
-// // GET ALL TEACHERS
-// // =================================
-
-// exports.getTeachers =
-//   async (req, res) => {
-
-//     try {
-
-//       const teachers =
-//         await Teacher.find()
-
-//           .sort({
-//             createdAt: -1,
-//           });
-
-//       res.status(200).json({
-
-//         success: true,
-
-//         total:
-//           teachers.length,
-
-//         data:
-//           teachers,
-
-//       });
-
-//     } catch (error) {
-
-//       console.log(error);
-
-//       res.status(500).json({
-
-//         success: false,
-
-//         message:
-//           error.message,
-
-//       });
-
-//     }
-
-//   };
-
-// // =================================
-// // GET SINGLE TEACHER
-// // =================================
-
-// exports.getSingleTeacher =
-//   async (req, res) => {
-
-//     try {
-
-//       const teacher =
-//         await Teacher.findById(
-//           req.params.id
-//         );
-
-//       if (!teacher) {
-
-//         return res.status(404).json({
-
-//           success: false,
-
-//           message:
-//             "Teacher Not Found",
-
-//         });
-
-//       }
-
-//       res.status(200).json({
-
-//         success: true,
-
-//         data:
-//           teacher,
-
-//       });
-
-//     } catch (error) {
-
-//       console.log(error);
-
-//       res.status(500).json({
-
-//         success: false,
-
-//         message:
-//           error.message,
-
-//       });
-
-//     }
-
-//   };
-
-// // =================================
-// // UPDATE TEACHER
-// // =================================
-
-// exports.updateTeacher =
-//   async (req, res) => {
-
-//     try {
-
-//       const teacher =
-//         await Teacher.findByIdAndUpdate(
-
-//           req.params.id,
-
-//           req.body,
-
-//           {
-//             new: true,
-//           }
-
-//         );
-
-//       if (!teacher) {
-
-//         return res.status(404).json({
-
-//           success: false,
-
-//           message:
-//             "Teacher Not Found",
-
-//         });
-
-//       }
-
-//       res.status(200).json({
-
-//         success: true,
-
-//         message:
-//           "Teacher Updated Successfully",
-
-//         data:
-//           teacher,
-
-//       });
-
-//     } catch (error) {
-
-//       console.log(error);
-
-//       res.status(500).json({
-
-//         success: false,
-
-//         message:
-//           error.message,
-
-//       });
-
-//     }
-
-//   };
-
-// // =================================
-// // DELETE TEACHER
-// // =================================
-
-// exports.deleteTeacher =
-//   async (req, res) => {
-
-//     try {
-
-//       const teacher =
-//         await Teacher.findByIdAndDelete(
-//           req.params.id
-//         );
-
-//       if (!teacher) {
-
-//         return res.status(404).json({
-
-//           success: false,
-
-//           message:
-//             "Teacher Not Found",
-
-//         });
-
-//       }
-
-//       res.status(200).json({
-
-//         success: true,
-
-//         message:
-//           "Teacher Deleted Successfully",
-
-//       });
-
-//     } catch (error) {
-
-//       console.log(error);
-
-//       res.status(500).json({
-
-//         success: false,
-
-//         message:
-//           error.message,
-
-//       });
-
-//     }
-
-//   };
 
 const Teacher =
-  require("../models/Teacher");
+  require("../models/teacherModel");
 
-// =================================
+
+
+// ======================================
 // CREATE TEACHER
-// =================================
+// ======================================
 
 exports.createTeacher =
   async (req, res) => {
@@ -302,19 +51,19 @@ exports.createTeacher =
 
         teacherName,
         email,
-        phone,
-        profileImage,
-        qualification,
-        experience,
-        description,
         subjects,
-        status,
+        bio,
+        profile_image,
+        experience,
+        qualification,
 
       } = req.body;
 
-      // ======================
+
+
+      // ======================================
       // VALIDATION
-      // ======================
+      // ======================================
 
       if (!teacherName) {
 
@@ -329,9 +78,50 @@ exports.createTeacher =
 
       }
 
-      // ======================
-      // CREATE TEACHER
-      // ======================
+      if (!email) {
+
+        return res.status(400).json({
+
+          success: false,
+
+          message:
+            "Email is required",
+
+        });
+
+      }
+
+
+
+      // ======================================
+      // CHECK EXISTING
+      // ======================================
+
+      const existingTeacher =
+        await Teacher.findOne({
+
+          email,
+
+        });
+
+      if (existingTeacher) {
+
+        return res.status(400).json({
+
+          success: false,
+
+          message:
+            "Teacher already exists",
+
+        });
+
+      }
+
+
+
+      // ======================================
+      // CREATE
+      // ======================================
 
       const teacher =
         await Teacher.create({
@@ -340,35 +130,29 @@ exports.createTeacher =
 
           email,
 
-          phone,
+          // subjects,
+          subjects: subjects || [],
 
-          profileImage,
+          bio,
 
-          qualification,
+          profile_image,
 
           experience,
 
-          description,
-
-          subjects,
-
-          status,
+          qualification,
 
         });
 
-      // ======================
-      // RESPONSE
-      // ======================
+
 
       res.status(201).json({
 
         success: true,
 
         message:
-          "Teacher Added Successfully",
+          "Teacher created successfully",
 
-        data:
-          teacher,
+        teacher,
 
       });
 
@@ -389,9 +173,11 @@ exports.createTeacher =
 
   };
 
-// =================================
+
+
+// ======================================
 // GET ALL TEACHERS
-// =================================
+// ======================================
 
 exports.getTeachers =
   async (req, res) => {
@@ -399,37 +185,28 @@ exports.getTeachers =
     try {
 
       const teachers =
-        await Teacher.find()
+        await Teacher.find({
 
-          .populate({
+          is_active: true,
 
-            path: "reels",
+        })
 
-            options: {
-              sort: {
-                createdAt: -1,
-              },
-            },
+        .populate("subjects")
 
-          })
+        .sort({
+          createdAt: -1,
+        });
 
-          .sort({
-            createdAt: -1,
-          });
 
-      // ======================
-      // RESPONSE
-      // ======================
 
       res.status(200).json({
 
         success: true,
 
-        total:
+        count:
           teachers.length,
 
-        data:
-          teachers,
+        teachers,
 
       });
 
@@ -450,9 +227,11 @@ exports.getTeachers =
 
   };
 
-// =================================
+
+
+// ======================================
 // GET SINGLE TEACHER
-// =================================
+// ======================================
 
 exports.getSingleTeacher =
   async (req, res) => {
@@ -461,24 +240,14 @@ exports.getSingleTeacher =
 
       const teacher =
         await Teacher.findById(
+
           req.params.id
+
         )
 
-          .populate({
+        .populate("subjects");
 
-            path: "reels",
 
-            options: {
-              sort: {
-                createdAt: -1,
-              },
-            },
-
-          });
-
-      // ======================
-      // CHECK TEACHER
-      // ======================
 
       if (!teacher) {
 
@@ -487,22 +256,19 @@ exports.getSingleTeacher =
           success: false,
 
           message:
-            "Teacher Not Found",
+            "Teacher not found",
 
         });
 
       }
 
-      // ======================
-      // RESPONSE
-      // ======================
+
 
       res.status(200).json({
 
         success: true,
 
-        data:
-          teacher,
+        teacher,
 
       });
 
@@ -523,9 +289,11 @@ exports.getSingleTeacher =
 
   };
 
-// =================================
+
+
+// ======================================
 // UPDATE TEACHER
-// =================================
+// ======================================
 
 exports.updateTeacher =
   async (req, res) => {
@@ -541,23 +309,16 @@ exports.updateTeacher =
 
           {
 
-            new: true,
-
-            runValidators: true,
+            returnDocument:
+              "after",
 
           }
 
         )
 
-          .populate({
+        .populate("subjects");
 
-            path: "reels",
 
-          });
-
-      // ======================
-      // CHECK TEACHER
-      // ======================
 
       if (!teacher) {
 
@@ -566,25 +327,22 @@ exports.updateTeacher =
           success: false,
 
           message:
-            "Teacher Not Found",
+            "Teacher not found",
 
         });
 
       }
 
-      // ======================
-      // RESPONSE
-      // ======================
+
 
       res.status(200).json({
 
         success: true,
 
         message:
-          "Teacher Updated Successfully",
+          "Teacher updated successfully",
 
-        data:
-          teacher,
+        teacher,
 
       });
 
@@ -605,9 +363,11 @@ exports.updateTeacher =
 
   };
 
-// =================================
+
+
+// ======================================
 // DELETE TEACHER
-// =================================
+// ======================================
 
 exports.deleteTeacher =
   async (req, res) => {
@@ -615,13 +375,26 @@ exports.deleteTeacher =
     try {
 
       const teacher =
-        await Teacher.findByIdAndDelete(
-          req.params.id
+        await Teacher.findByIdAndUpdate(
+
+          req.params.id,
+
+          {
+
+            is_active: false,
+
+          },
+
+          {
+
+            returnDocument:
+              "after",
+
+          }
+
         );
 
-      // ======================
-      // CHECK TEACHER
-      // ======================
+
 
       if (!teacher) {
 
@@ -630,22 +403,20 @@ exports.deleteTeacher =
           success: false,
 
           message:
-            "Teacher Not Found",
+            "Teacher not found",
 
         });
 
       }
 
-      // ======================
-      // RESPONSE
-      // ======================
+
 
       res.status(200).json({
 
         success: true,
 
         message:
-          "Teacher Deleted Successfully",
+          "Teacher deleted successfully",
 
       });
 

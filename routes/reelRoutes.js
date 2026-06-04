@@ -4,76 +4,115 @@ const express =
 const router =
   express.Router();
 
+const upload =
+  require("../middleware/upload");
+
 const {
 
   createReel,
-
-  getReels,
-
-  getSingleReel,
-
+  fetchAllReels,
+  fetchPyqReels,
+  fetchSingleReel,
   updateReel,
-
-  deleteReel,
+  softDeleteReel,
+  fetchTopVideos,
   getTeacherReels,
+   fetchNewArrivalReels,
 
 } = require(
-
   "../controllers/reelController"
-
 );
 
-// ============================
-// CREATE REEL
-// ============================
+
+
+// FILE UPLOAD
+
+const reelUpload =
+  upload.fields([
+
+    {
+      name: "video",
+      maxCount: 1,
+    },
+
+    {
+      name: "thumbnail",
+      maxCount: 1,
+    },
+
+  ]);
+
+
+
+// ======================================
+// CREATE
+// ======================================
 
 router.post(
   "/create",
+  reelUpload,
   createReel
 );
 
-// ============================
-// GET ALL REELS
-// ============================
+
+
+// ======================================
+// GET ALL
+// ======================================
 
 router.get(
   "/",
-  getReels
+  fetchAllReels
 );
 
-// ============================
-// GET SINGLE REEL
-// ============================
+
+
+// ======================================
+// GET PYQ
+// ======================================
+
+router.get(
+  "/pyq",
+  fetchPyqReels
+);
+
+router.get("/new-arrivals", fetchNewArrivalReels);
+
+// ======================================
+// GET SINGLE
+// ======================================
 
 router.get(
   "/:id",
-  getSingleReel
+  fetchSingleReel
 );
 
-// ============================
-// UPDATE REEL
-// ============================
+
+
+// ======================================
+// UPDATE
+// ======================================
 
 router.put(
   "/:id",
+  reelUpload,
   updateReel
 );
 
-// ============================
-// DELETE REEL
-// ============================
+
+
+// ======================================
+// DELETE
+// ======================================
 
 router.delete(
   "/:id",
-  deleteReel
+  softDeleteReel
 );
-router.get(
 
-  "/teacher/:teacherId",
+router.get( "/teacher/:teacherId", getTeacherReels );
 
-  getTeacherReels
-
-);
+router.get( "/top/videos", fetchTopVideos );
 
 module.exports =
   router;

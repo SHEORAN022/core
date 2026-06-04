@@ -1,118 +1,99 @@
+// const express =
+//   require("express");
+
+// const router =
+//   express.Router();
+
+// const {
+
+//   createSubject,
+
+//   getSubjectsByExam,
+
+// } = require(
+//   "../controllers/subjectController"
+// );
+
+
+
+// // CREATE
+// router.post(
+//   "/create",
+//   createSubject
+// );
+
+
+
+// // GET SUBJECTS WITH FULL DATA
+// router.get(
+//   "/exam/:examId",
+//   getSubjectsByExam
+// );
+
+// module.exports =
+//   router;
+
 const express =
   require("express");
 
 const router =
   express.Router();
 
-const upload =
-  require(
-    "../middleware/upload"
-  );
-
 const {
 
   createSubject,
-
-  getSubjects,
-
+  getSubjectsByExam,
   getSingleSubject,
-
   updateSubject,
-
   deleteSubject,
 
 } = require(
-
   "../controllers/subjectController"
-
 );
 
-// =================================
-// CREATE SUBJECT
-// =================================
+
+
+// CREATE
 
 router.post(
-
   "/create",
-
-  upload.fields([
-
-    {
-      name: "image",
-      maxCount: 1,
-    },
-
-    {
-      name: "icon",
-      maxCount: 1,
-    },
-
-  ]),
-
   createSubject
-
 );
 
-// =================================
-// GET ALL SUBJECTS
-// =================================
+
+
+// GET SUBJECTS BY EXAM
 
 router.get(
-
-  "/",
-
-  getSubjects
-
+  "/exam/:examId",
+  getSubjectsByExam
 );
 
-// =================================
-// GET SINGLE SUBJECT
-// =================================
+
+
+// GET SINGLE
 
 router.get(
-
   "/:id",
-
   getSingleSubject
-
 );
 
-// =================================
-// UPDATE SUBJECT
-// =================================
+
+
+// UPDATE
 
 router.put(
-
   "/:id",
-
-  upload.fields([
-
-    {
-      name: "image",
-      maxCount: 1,
-    },
-
-    {
-      name: "icon",
-      maxCount: 1,
-    },
-
-  ]),
-
   updateSubject
-
 );
 
-// =================================
-// DELETE SUBJECT
-// =================================
+
+
+// DELETE
 
 router.delete(
-
   "/:id",
-
   deleteSubject
-
 );
 
 module.exports =

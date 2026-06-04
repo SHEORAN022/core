@@ -1,174 +1,366 @@
+// // const Subject = require("../models/subjectModel");
+
+// // exports.createSubject = async (req, res) => {
+// //   try {
+// //     const subject = await Subject.create(req.body);
+
+// //     res.status(201).json({
+// //       success: true,
+// //       subject,
+// //     });
+// //   } catch (error) {
+// //     res.status(500).json({
+// //       success: false,
+// //       message: error.message,
+// //     });
+// //   }
+// // };
+
+// // exports.getSubjectsByExam = async (req, res) => {
+// //   try {
+// //     const subjects = await Subject.find({
+// //       examId: req.params.examId,
+// //       isDeleted: false,
+// //     });
+
+// //     res.json({
+// //       success: true,
+// //       subjects,
+// //     });
+// //   } catch (error) {
+// //     res.status(500).json({
+// //       success: false,
+// //       message: error.message,
+// //     });
+// //   }
+// // };
+
+
+// const Subject =
+//   require("../models/subjectModel");
+
+// const Chapter =
+//   require("../models/chapterModel");
+
+// const Topic =
+//   require("../models/topicModel");
+
+// const Reel =
+//   require("../models/Reel");
+
+// const Assessment =
+//   require("../models/Assessment");
+
+
+
+// // ======================================
+// // CREATE SUBJECT
+// // ======================================
+
+// exports.createSubject =
+//   async (req, res) => {
+
+//     try {
+
+//       const subject =
+//         await Subject.create(
+//           req.body
+//         );
+
+//       res.status(201).json({
+
+//         success: true,
+
+//         subject,
+
+//       });
+
+//     } catch (error) {
+
+//       res.status(500).json({
+
+//         success: false,
+
+//         message:
+//           error.message,
+
+//       });
+
+//     }
+//   };
+
+
+
+// // ======================================
+// // GET SUBJECTS BY EXAM
+// // ======================================
+
+// exports.getSubjectsByExam =
+//   async (req, res) => {
+
+//     try {
+
+//       // ======================================
+//       // GET SUBJECTS
+//       // ======================================
+
+//       const subjects =
+//         await Subject.find({
+
+//           examId:
+//             req.params.examId,
+
+//           isDeleted: false,
+
+//         });
+
+
+
+//       // ======================================
+//       // FULL SUBJECT DATA
+//       // ======================================
+
+//       const finalSubjects =
+//         await Promise.all(
+
+//           subjects.map(
+//             async (subject) => {
+
+//               // ======================================
+//               // CHAPTERS
+//               // ======================================
+
+//               const chapters =
+//                 await Chapter.find({
+
+//                   subjectId:
+//                     subject._id,
+
+//                   isDeleted:
+//                     false,
+
+//                 });
+
+
+
+//               const chapterIds =
+//                 chapters.map(
+//                   (chapter) =>
+//                     chapter._id
+//                 );
+
+
+
+//               // ======================================
+//               // TOPICS
+//               // ======================================
+
+//               const topics =
+//                 await Topic.find({
+
+//                   chapterId: {
+//                     $in:
+//                       chapterIds,
+//                   },
+
+//                   isDeleted:
+//                     false,
+
+//                 });
+
+
+
+//               const topicIds =
+//                 topics.map(
+//                   (topic) =>
+//                     topic._id
+//                 );
+
+
+
+//               // ======================================
+//               // REELS
+//               // ======================================
+
+//               const reels =
+//                 await Reel.find({
+
+//                   topicId: {
+//                     $in:
+//                       topicIds,
+//                   },
+
+//                   status:
+//                     "published",
+
+//                 })
+
+//                 .populate(
+//                   "teacherId"
+//                 )
+
+//                 .sort({
+
+//                   createdAt: -1,
+
+//                 });
+
+
+
+//               // ======================================
+//               // TEST SERIES
+//               // ======================================
+
+//               const tests =
+//                 await Assessment.find({
+
+//                   subject_id:
+//                     subject._id,
+
+//                   is_deleted:
+//                     false,
+
+//                 }).sort({
+
+//                   createdAt: -1,
+
+//                 });
+
+
+
+//               // ======================================
+//               // RETURN
+//               // ======================================
+
+//               return {
+
+//                 ...subject.toObject(),
+
+//                 chapters,
+
+//                 topics,
+
+//                 reels,
+
+//                 tests,
+
+//               };
+//             }
+//           )
+//         );
+
+
+
+//       // ======================================
+//       // RESPONSE
+//       // ======================================
+
+//       res.status(200).json({
+
+//         success: true,
+
+//         count:
+//           finalSubjects.length,
+
+//         subjects:
+//           finalSubjects,
+
+//       });
+
+//     } catch (error) {
+
+//       res.status(500).json({
+
+//         success: false,
+
+//         message:
+//           error.message,
+
+//       });
+
+//     }
+//   };
+
 const Subject =
-  require("../models/Subject");
+  require("../models/subjectModel");
 
-const uploadToBunny =
-  require("../utils/uploadToBunny");
+const Chapter =
+  require("../models/chapterModel");
 
-// =================================
+const Topic =
+  require("../models/topicModel");
+
+const Reel =
+  require("../models/Reel");
+
+const Assessment =
+  require("../models/Assessment");
+
+
+
+// ======================================
 // CREATE SUBJECT
-// =================================
+// ======================================
 
 exports.createSubject =
   async (req, res) => {
 
     try {
 
-      console.log(
-        "BODY =>",
-        req.body
-      );
+      const {
 
-      console.log(
-        "FILES =>",
-        req.files
-      );
+        examId,
+        name,
 
-      // ======================
-      // GET DATA
-      // ======================
+      } = req.body;
 
-      const name =
-        req.body?.name;
-
-      const description =
-        req.body?.description;
-
-      const status =
-        req.body?.status;
-
-      // ======================
-      // VALIDATION
-      // ======================
-
-      if (
-        !name ||
-        name.trim() === ""
-      ) {
+      if (!examId) {
 
         return res.status(400).json({
 
           success: false,
-
           message:
-            "Subject name is required",
+            "Exam ID required",
 
         });
 
       }
 
-      // ======================
-      // CHECK SUBJECT
-      // ======================
-
-      const alreadyExists =
-        await Subject.findOne({
-
-          name,
-
-        });
-
-      if (alreadyExists) {
+      if (!name) {
 
         return res.status(400).json({
 
           success: false,
-
           message:
-            "Subject already exists",
+            "Subject name required",
 
         });
 
       }
-
-      // ======================
-      // IMAGE UPLOAD
-      // ======================
-
-      let image = "";
-
-      if (
-        req.files &&
-        req.files.image &&
-        req.files.image[0]
-      ) {
-
-        image =
-          await uploadToBunny(
-
-            req.files.image[0],
-
-            "subjects"
-
-          );
-
-      }
-
-      // ======================
-      // ICON UPLOAD
-      // ======================
-
-      let icon = "";
-
-      if (
-        req.files &&
-        req.files.icon &&
-        req.files.icon[0]
-      ) {
-
-        icon =
-          await uploadToBunny(
-
-            req.files.icon[0],
-
-            "subjects"
-
-          );
-
-      }
-
-      // ======================
-      // CREATE SUBJECT
-      // ======================
 
       const subject =
         await Subject.create({
 
+          examId,
           name,
 
-          description,
-
-          image,
-
-          icon,
-
-          status,
-
         });
-
-      // ======================
-      // RESPONSE
-      // ======================
 
       res.status(201).json({
 
         success: true,
-
         message:
           "Subject created successfully",
 
-        data:
-          subject,
+        subject,
 
       });
 
     } catch (error) {
 
-      console.log(error);
-
       res.status(500).json({
 
         success: false,
-
         message:
           error.message,
 
@@ -178,39 +370,150 @@ exports.createSubject =
 
   };
 
-// =================================
-// GET ALL SUBJECTS
-// =================================
 
-exports.getSubjects =
+
+// ======================================
+// GET SUBJECTS BY EXAM
+// ======================================
+
+exports.getSubjectsByExam =
   async (req, res) => {
 
     try {
 
       const subjects =
-        await Subject.find()
+        await Subject.find({
 
-          .sort({
+          examId:
+            req.params.examId,
 
-            createdAt: -1,
+          isDeleted: false,
 
-          });
+        })
+
+        .sort({
+          createdAt: -1,
+        });
+
+      const finalSubjects =
+        await Promise.all(
+
+          subjects.map(
+            async (subject) => {
+
+              // CHAPTERS
+
+              const chapters =
+                await Chapter.find({
+
+                  subjectId:
+                    subject._id,
+
+                  isDeleted:
+                    false,
+
+                });
+
+              const chapterIds =
+                chapters.map(
+                  (chapter) =>
+                    chapter._id
+                );
+
+              // TOPICS
+
+              const topics =
+                await Topic.find({
+
+                  chapterId: {
+                    $in:
+                      chapterIds,
+                  },
+
+                  isDeleted:
+                    false,
+
+                });
+
+              const topicIds =
+                topics.map(
+                  (topic) =>
+                    topic._id
+                );
+
+              // REELS
+
+              const reels =
+                await Reel.find({
+
+                  topic_id: {
+                    $in:
+                      topicIds,
+                  },
+
+                  is_active:
+                    true,
+
+                })
+
+                .populate(
+                  "teacher_id"
+                )
+
+                .sort({
+
+                  createdAt: -1,
+
+                });
+
+              // TESTS
+
+              const tests =
+                await Assessment.find({
+
+                  subject_id:
+                    subject._id,
+
+                  is_deleted:
+                    false,
+
+                })
+
+                .sort({
+                  createdAt: -1,
+                });
+
+              return {
+
+                ...subject.toObject(),
+
+                chapters,
+
+                topics,
+
+                reels,
+
+                tests,
+
+              };
+
+            }
+          )
+        );
 
       res.status(200).json({
 
         success: true,
 
-        total:
-          subjects.length,
+        count:
+          finalSubjects.length,
 
-        data:
-          subjects,
+        subjects:
+          finalSubjects,
 
       });
 
     } catch (error) {
-
-      console.log(error);
 
       res.status(500).json({
 
@@ -225,9 +528,11 @@ exports.getSubjects =
 
   };
 
-// =================================
+
+
+// ======================================
 // GET SINGLE SUBJECT
-// =================================
+// ======================================
 
 exports.getSingleSubject =
   async (req, res) => {
@@ -236,9 +541,7 @@ exports.getSingleSubject =
 
       const subject =
         await Subject.findById(
-
           req.params.id
-
         );
 
       if (!subject) {
@@ -258,14 +561,11 @@ exports.getSingleSubject =
 
         success: true,
 
-        data:
-          subject,
+        subject,
 
       });
 
     } catch (error) {
-
-      console.log(error);
 
       res.status(500).json({
 
@@ -280,78 +580,26 @@ exports.getSingleSubject =
 
   };
 
-// =================================
+
+
+// ======================================
 // UPDATE SUBJECT
-// =================================
+// ======================================
 
 exports.updateSubject =
   async (req, res) => {
 
     try {
 
-      const updateData = {
-
-        ...req.body,
-
-      };
-
-      // ======================
-      // UPDATE IMAGE
-      // ======================
-
-      if (
-        req.files &&
-        req.files.image &&
-        req.files.image[0]
-      ) {
-
-        updateData.image =
-          await uploadToBunny(
-
-            req.files.image[0],
-
-            "subjects"
-
-          );
-
-      }
-
-      // ======================
-      // UPDATE ICON
-      // ======================
-
-      if (
-        req.files &&
-        req.files.icon &&
-        req.files.icon[0]
-      ) {
-
-        updateData.icon =
-          await uploadToBunny(
-
-            req.files.icon[0],
-
-            "subjects"
-
-          );
-
-      }
-
-      // ======================
-      // UPDATE SUBJECT
-      // ======================
-
       const subject =
         await Subject.findByIdAndUpdate(
 
           req.params.id,
 
-          updateData,
+          req.body,
 
           {
-
             new: true,
-
           }
 
         );
@@ -369,10 +617,6 @@ exports.updateSubject =
 
       }
 
-      // ======================
-      // RESPONSE
-      // ======================
-
       res.status(200).json({
 
         success: true,
@@ -380,14 +624,11 @@ exports.updateSubject =
         message:
           "Subject updated successfully",
 
-        data:
-          subject,
+        subject,
 
       });
 
     } catch (error) {
-
-      console.log(error);
 
       res.status(500).json({
 
@@ -402,9 +643,11 @@ exports.updateSubject =
 
   };
 
-// =================================
+
+
+// ======================================
 // DELETE SUBJECT
-// =================================
+// ======================================
 
 exports.deleteSubject =
   async (req, res) => {
@@ -412,9 +655,17 @@ exports.deleteSubject =
     try {
 
       const subject =
-        await Subject.findByIdAndDelete(
+        await Subject.findByIdAndUpdate(
 
-          req.params.id
+          req.params.id,
+
+          {
+            isDeleted: true,
+          },
+
+          {
+            new: true,
+          }
 
         );
 
@@ -441,8 +692,6 @@ exports.deleteSubject =
       });
 
     } catch (error) {
-
-      console.log(error);
 
       res.status(500).json({
 

@@ -48,6 +48,7 @@ const subjectSchema =
       // ======================
 
       status: {
+
         type: String,
 
         enum: [
@@ -67,6 +68,7 @@ const subjectSchema =
   );
 
 module.exports =
+  mongoose.models.Subject ||
   mongoose.model(
     "Subject",
     subjectSchema

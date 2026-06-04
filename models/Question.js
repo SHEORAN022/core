@@ -1,157 +1,262 @@
-// const mongoose = require("mongoose");
-
-// // ===============================
-// // QUESTION SCHEMA
-// // ===============================
-
-// const questionSchema = new mongoose.Schema(
-
-//   {
-
-//     test: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "Test",
-//       required: true,
-//     },
-
-//     question: {
-//       type: String,
-//       required: true,
-//       trim: true,
-//     },
-
-//     options: [
-
-//       {
-//         type: String,
-//         required: true,
-//       },
-
-//     ],
-
-//     correctAnswer: {
-//       type: String,
-//       required: true,
-//     },
-
-//     explanation: {
-//       type: String,
-//       default: "",
-//     },
-
-//     marks: {
-//       type: Number,
-//       default: 4,
-//     },
-
-//     negativeMarks: {
-//       type: Number,
-//       default: 1,
-//     },
-
-//     subject: {
-//       type: String,
-//       default: "",
-//     },
-
-//   },
-
-//   { timestamps: true }
-
-// );
-
-// module.exports =
-//   mongoose.model(
-//     "Question",
-//     questionSchema
-//   );
-
-
-const mongoose = require("mongoose");
-
-// ===============================
-// QUESTION SCHEMA
-// ===============================
+const mongoose =
+  require("mongoose");
 
 const questionSchema =
   new mongoose.Schema(
 
     {
 
-      test: {
+      // =====================================
+      // ASSESSMENT
+      // =====================================
+
+      assessment_id: {
+
         type:
           mongoose.Schema.Types.ObjectId,
 
         ref:
-          "Test",
+          "Assessment",
 
-        required: true,
+        required: false,
+
       },
 
-      question: {
+
+
+      // =====================================
+      // EXAM
+      // =====================================
+
+      exam_id: {
+
+        type:
+          mongoose.Schema.Types.ObjectId,
+
+        ref:
+          "Exam",
+
+      },
+
+
+
+      // =====================================
+      // SUBJECT
+      // =====================================
+
+      subject_id: {
+
+        type:
+          mongoose.Schema.Types.ObjectId,
+
+        ref:
+          "Subject",
+
+      },
+
+
+
+      // =====================================
+      // CHAPTER
+      // =====================================
+
+      chapter_id: {
+
+        type:
+          mongoose.Schema.Types.ObjectId,
+
+        ref:
+          "Chapter",
+
+      },
+
+
+
+      // =====================================
+      // TOPIC
+      // =====================================
+
+      topic_id: {
+
+        type:
+          mongoose.Schema.Types.ObjectId,
+
+        ref:
+          "Topic",
+
+      },
+
+
+
+      // =====================================
+      // QUESTION
+      // =====================================
+
+      question_text: {
+
         type: String,
+
         required: true,
-        trim: true,
+
       },
+
+
+
+      question_image_url:
+        String,
+
+
+
+      // =====================================
+      // OPTIONS
+      // =====================================
 
       options: [
 
         {
-          type: String,
-          required: true,
+
+          option: {
+
+            type: String,
+
+            enum: [
+
+              "A",
+
+              "B",
+
+              "C",
+
+              "D",
+
+            ],
+
+          },
+
+
+
+          text:
+            String,
+
+
+
+          image_url:
+            String,
+
         },
 
       ],
 
-      correctAnswer: {
+
+
+      // =====================================
+      // CORRECT ANSWER
+      // =====================================
+
+      correct_answer: {
+
         type: String,
+
         required: true,
+
       },
+
+
+
+      // =====================================
+      // EXPLANATION
+      // =====================================
 
       explanation: {
+
         type: String,
-        default: "",
+
       },
+
+
+
+      explanation_image_url:
+        String,
+
+
+
+      // =====================================
+      // MARKS
+      // =====================================
 
       marks: {
+
         type: Number,
+
         default: 4,
+
       },
 
-      negativeMarks: {
+
+
+      negative_marks: {
+
         type: Number,
+
         default: 1,
+
       },
 
-      // ===========================
-      // ANALYTICS FIELDS
-      // ===========================
 
-      subject: {
+
+      // =====================================
+      // DIFFICULTY
+      // =====================================
+
+      difficulty: {
+
         type: String,
-        default: "",
+
+        enum: [
+
+          "easy",
+
+          "medium",
+
+          "hard",
+
+        ],
+
+        default:
+          "medium",
+
       },
 
-      chapter: {
-        type: String,
-        default: "",
-      },
 
-      topic: {
-        type: String,
-        default: "",
+
+      // =====================================
+      // STATUS
+      // =====================================
+
+      is_deleted: {
+
+        type: Boolean,
+
+        default: false,
+
       },
 
     },
 
     {
+
       timestamps: true,
+
     }
 
   );
 
 module.exports =
   mongoose.model(
+
     "Question",
+
     questionSchema
+
   );
+

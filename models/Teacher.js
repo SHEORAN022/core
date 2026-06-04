@@ -1,96 +1,3 @@
-// const mongoose =
-//   require("mongoose");
-
-// const teacherSchema =
-//   new mongoose.Schema(
-
-//     {
-
-//       // ======================
-//       // BASIC DETAILS
-//       // ======================
-
-//       teacherName: {
-//         type: String,
-//         required: true,
-//         trim: true,
-//       },
-
-//       email: {
-//         type: String,
-//         default: "",
-//       },
-
-//       phone: {
-//         type: String,
-//         default: "",
-//       },
-
-//       profileImage: {
-//         type: String,
-//         default: "",
-//       },
-
-//       // ======================
-//       // PROFESSIONAL DETAILS
-//       // ======================
-
-//       qualification: {
-//         type: String,
-//         default: "",
-//       },
-
-//       experience: {
-//         type: Number,
-//         default: 0,
-//       },
-
-//       description: {
-//         type: String,
-//         default: "",
-//       },
-
-//       // ======================
-//       // SUBJECTS
-//       // ======================
-
-//       subjects: [
-
-//         {
-//           type: String,
-//         },
-
-//       ],
-
-//       // ======================
-//       // STATUS
-//       // ======================
-
-//       status: {
-//         type: String,
-
-//         enum: [
-//           "Active",
-//           "Inactive",
-//         ],
-
-//         default: "Active",
-//       },
-
-//     },
-
-//     {
-//       timestamps: true,
-//     }
-
-//   );
-
-// module.exports =
-//   mongoose.model(
-//     "Teacher",
-//     teacherSchema
-//   );
-
 
 const mongoose =
   require("mongoose");
@@ -166,6 +73,7 @@ const teacherSchema =
       // ======================
 
       status: {
+
         type: String,
 
         enum: [
@@ -179,6 +87,7 @@ const teacherSchema =
     },
 
     {
+
       timestamps: true,
 
       toJSON: {
@@ -205,7 +114,8 @@ teacherSchema.virtual(
 
     localField: "_id",
 
-    foreignField: "teacher",
+    // IMPORTANT
+    foreignField: "teacherId",
 
   }
 );
@@ -215,7 +125,9 @@ teacherSchema.virtual(
 // ======================
 
 module.exports =
+  mongoose.models.Teacher ||
   mongoose.model(
     "Teacher",
     teacherSchema
   );
+

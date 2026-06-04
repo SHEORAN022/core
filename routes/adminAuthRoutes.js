@@ -1,33 +1,16 @@
 const express = require("express");
-
 const router = express.Router();
 
-const {
-  signupAdmin,
-  loginAdmin,
-} = require("../controllers/adminAuthController");
+// ✅ CHECK KARO: Ye import sahi hai?
+const { 
+  loginAdmin, 
+  registerAdmin,
+  getAdminProfile 
+} = require("../controllers/adminAuthController"); // ← YE FILE EXIST KARTI HAI?
 
-const protectAdmin = require("../middleware/authMiddleware");
-
-
-// Signup
-router.post("/signup", signupAdmin);
-
-// Login
-router.post("/login", loginAdmin);
-
-
-// Protected Route Example
-router.get(
-  "/profile",
-  protectAdmin,
-  (req, res) => {
-    res.status(200).json({
-      success: true,
-      message: "Admin profile accessed",
-      admin: req.admin,
-    });
-  }
-);
+// ✅ AGAR CONTROLLER EXPORT NHI HUA TOH YEH UNDEFINED HOGA
+router.post("/login", loginAdmin); // ← AGAR loginAdmin undefined hai toh error ayega
+router.post("/register", registerAdmin);
+router.get("/profile", getAdminProfile);
 
 module.exports = router;

@@ -15,7 +15,6 @@ const chapterSchema =
       default: 1,
     },
 
-    // OPTIONAL IMAGE
     image: {
       type: String,
       default: "",
@@ -83,13 +82,18 @@ const examSchema =
 
       status: {
         type: String,
-        enum: ["Active", "Draft"],
+        enum: [
+          "Active",
+          "Draft"
+        ],
         default: "Active",
       },
 
     },
 
-    { timestamps: true }
+    {
+      timestamps: true
+    }
 
   );
 
@@ -99,4 +103,9 @@ const examSchema =
 // ===============================
 
 module.exports =
-  mongoose.model("Exam", examSchema);
+  mongoose.models.Exam ||
+  mongoose.model(
+    "Exam",
+    examSchema
+  );
+

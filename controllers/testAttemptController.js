@@ -1,375 +1,3 @@
-// const TestAttempt =
-//   require(
-//     "../models/TestAttempt"
-//   );
-
-// const Test =
-//   require("../models/Test");
-
-// const Question =
-//   require(
-//     "../models/Question"
-//   );
-
-// // =================================
-// // SUBMIT TEST
-// // =================================
-
-// exports.submitTest =
-//   async (req, res) => {
-
-//     try {
-
-//       const {
-//         test,
-//         answers,
-//       } = req.body;
-
-//       // =========================
-//       // USER FROM TOKEN
-//       // =========================
-
-//       const user =
-//         req.user.id;
-
-//       // =========================
-//       // CHECK TEST
-//       // =========================
-
-//       const testData =
-//         await Test.findById(
-//           test
-//         );
-
-//       if (!testData) {
-
-//         return res.status(404).json({
-
-//           success: false,
-
-//           message:
-//             "Test not found",
-
-//         });
-
-//       }
-
-//       // =========================
-//       // ALREADY SUBMITTED
-//       // =========================
-
-//       const alreadyAttempted =
-//         await TestAttempt.findOne({
-
-//           user,
-//           test,
-
-//         });
-
-//       if (alreadyAttempted) {
-
-//         return res.status(400).json({
-
-//           success: false,
-
-//           message:
-//             "Test already submitted",
-
-//         });
-
-//       }
-
-//       let correct = 0;
-
-//       let wrong = 0;
-
-//       let finalAnswers = [];
-
-//       // =========================
-//       // CHECK ANSWERS
-//       // =========================
-
-//       for (const item of answers) {
-
-//         const question =
-//           await Question.findById(
-//             item.question
-//           );
-
-//         if (!question) continue;
-
-//         const isCorrect =
-
-//           question.correctAnswer ===
-//           item.selectedOption;
-
-//         if (isCorrect) {
-
-//           correct++;
-
-//         } else {
-
-//           wrong++;
-
-//         }
-
-//         finalAnswers.push({
-
-//           question:
-//             question._id,
-
-//           selectedOption:
-//             item.selectedOption,
-
-//           correctAnswer:
-//             question.correctAnswer,
-
-//           isCorrect,
-
-//         });
-
-//       }
-
-//       // =========================
-//       // SCORE
-//       // =========================
-
-//       const totalQuestions =
-//         answers.length;
-
-//       const percentage =
-//         totalQuestions > 0
-
-//           ? (
-//               (
-//                 correct /
-//                 totalQuestions
-//               ) * 100
-//             ).toFixed(2)
-
-//           : 0;
-
-//       // =========================
-//       // SAVE ATTEMPT
-//       // =========================
-
-//       const attempt =
-//         await TestAttempt.create({
-
-//           user,
-
-//           test,
-
-//           answers:
-//             finalAnswers,
-
-//           totalQuestions,
-
-//           correctAnswers:
-//             correct,
-
-//           wrongAnswers:
-//             wrong,
-
-//           score:
-//             correct,
-
-//           percentage,
-
-//         });
-
-//       // =========================
-//       // RESPONSE
-//       // =========================
-
-//       res.status(201).json({
-
-//         success: true,
-
-//         message:
-//           "Test submitted successfully",
-
-//         result: {
-
-//           totalQuestions,
-
-//           correctAnswers:
-//             correct,
-
-//           wrongAnswers:
-//             wrong,
-
-//           score:
-//             correct,
-
-//           percentage,
-
-//         },
-
-//         attempt,
-
-//       });
-
-//     } catch (error) {
-
-//       console.log(error);
-
-//       res.status(500).json({
-
-//         success: false,
-
-//         message:
-//           error.message,
-
-//       });
-
-//     }
-
-//   };
-
-// // =================================
-// // GET MY ATTEMPTS
-// // =================================
-
-// exports.getMyAttempts =
-//   async (req, res) => {
-
-//     try {
-
-//       const user =
-//         req.user.id;
-
-//       const attempts =
-//         await TestAttempt.find({
-
-//           user,
-
-//         })
-
-//           .populate({
-//             path: "test",
-
-//             populate: [
-//               {
-//                 path: "exam",
-//               },
-
-//               {
-//                 path: "teacher",
-//               },
-//             ],
-//           })
-
-//           .sort({
-//             createdAt: -1,
-//           });
-
-//       res.status(200).json({
-
-//         success: true,
-
-//         total:
-//           attempts.length,
-
-//         attempts,
-
-//       });
-
-//     } catch (error) {
-
-//       console.log(error);
-
-//       res.status(500).json({
-
-//         success: false,
-
-//         message:
-//           error.message,
-
-//       });
-
-//     }
-
-//   };
-
-// // =================================
-// // GET SINGLE ATTEMPT
-// // =================================
-
-// exports.getSingleAttempt =
-//   async (req, res) => {
-
-//     try {
-
-//       const attempt =
-//         await TestAttempt.findById(
-
-//           req.params.id
-
-//         )
-
-//           .populate("user")
-
-//           .populate({
-
-//             path: "test",
-
-//             populate: [
-
-//               {
-//                 path: "exam",
-//               },
-
-//               {
-//                 path: "teacher",
-//               },
-
-//             ],
-
-//           })
-
-//           .populate(
-//             "answers.question"
-//           );
-
-//       if (!attempt) {
-
-//         return res.status(404).json({
-
-//           success: false,
-
-//           message:
-//             "Attempt not found",
-
-//         });
-
-//       }
-
-//       res.status(200).json({
-
-//         success: true,
-
-//         attempt,
-
-//       });
-
-//     } catch (error) {
-
-//       console.log(error);
-
-//       res.status(500).json({
-
-//         success: false,
-
-//         message:
-//           error.message,
-
-//       });
-
-//     }
-
-//   };
-
 const TestAttempt =
   require(
     "../models/TestAttempt"
@@ -381,6 +9,21 @@ const Test =
 const Question =
   require(
     "../models/Question"
+  );
+
+const Reel =
+  require(
+    "../models/Reel"
+  );
+
+const Video =
+  require(
+    "../models/Video"
+  );
+
+const User =
+  require(
+    "../models/User"
   );
 
 // =================================
@@ -405,6 +48,29 @@ exports.submitTest =
         req.user._id;
 
       // =========================
+      // VALIDATION
+      // =========================
+
+      if (
+        !test ||
+        !answers ||
+        !Array.isArray(
+          answers
+        )
+      ) {
+
+        return res.status(400).json({
+
+          success: false,
+
+          message:
+            "Invalid request data",
+
+        });
+
+      }
+
+      // =========================
       // CHECK TEST
       // =========================
 
@@ -427,29 +93,19 @@ exports.submitTest =
       }
 
       // =========================
-      // CHECK ALREADY ATTEMPTED
+      // MULTIPLE ATTEMPTS
       // =========================
 
-      const alreadyAttempted =
-        await TestAttempt.findOne({
+      const previousAttempts =
+        await TestAttempt.countDocuments({
 
           user,
           test,
 
         });
 
-      if (alreadyAttempted) {
-
-        return res.status(400).json({
-
-          success: false,
-
-          message:
-            "Test already submitted",
-
-        });
-
-      }
+      const attemptNumber =
+        previousAttempts + 1;
 
       // =========================
       // SCORE VARIABLES
@@ -474,7 +130,8 @@ exports.submitTest =
             item.question
           );
 
-        if (!question) continue;
+        if (!question)
+          continue;
 
         // =========================
         // CHECK ANSWER
@@ -482,8 +139,15 @@ exports.submitTest =
 
         const isCorrect =
 
-          question.correctAnswer ===
-          item.selectedOption;
+          question.correctAnswer
+            .trim()
+            .toLowerCase()
+
+          ===
+
+          item.selectedOption
+            .trim()
+            .toLowerCase();
 
         // =========================
         // SCORE CALCULATION
@@ -528,7 +192,7 @@ exports.submitTest =
             question.topic,
 
           // =====================
-          // ANSWER
+          // ANSWER DATA
           // =====================
 
           selectedOption:
@@ -568,12 +232,16 @@ exports.submitTest =
 
         totalQuestions > 0
 
-          ? (
+          ? Number(
+
               (
-                correct /
-                totalQuestions
-              ) * 100
-            ).toFixed(2)
+                (
+                  correct /
+                  totalQuestions
+                ) * 100
+              ).toFixed(2)
+
+            )
 
           : 0;
 
@@ -588,6 +256,11 @@ exports.submitTest =
 
           test,
 
+          type:
+            "Study",
+
+          attemptNumber,
+
           answers:
             finalAnswers,
 
@@ -599,12 +272,176 @@ exports.submitTest =
           wrongAnswers:
             wrong,
 
-          score:
-            score,
+          score,
 
           percentage,
 
         });
+
+      // =========================
+      // WEAK TOPICS
+      // =========================
+
+      const weakTopics =
+
+        finalAnswers.filter(
+          (item) =>
+            !item.isCorrect
+        );
+
+      // =========================
+      // RECOMMENDED CONTENT
+      // =========================
+
+      let recommendedReels = [];
+
+      let recommendedVideos = [];
+
+      // =========================
+      // LOOP WEAK TOPICS
+      // =========================
+
+      for (const weak of weakTopics) {
+
+        // =====================
+        // REELS
+        // =====================
+
+        const reels =
+          await Reel.find({
+
+            status:
+              "Active",
+
+            subject:
+              weak.subject,
+
+            chapter:
+              weak.chapter,
+
+            topic:
+              weak.topic,
+
+          })
+
+            .populate(
+              "teacher"
+            )
+
+            .limit(10);
+
+        recommendedReels.push(
+          ...reels
+        );
+
+        // =====================
+        // VIDEOS
+        // =====================
+
+        const videos =
+          await Video.find({
+
+            status:
+              "Active",
+
+            chapter:
+              weak.chapter,
+
+            topic:
+              weak.topic,
+
+          })
+
+            .populate(
+              "subject"
+            )
+
+            .limit(10);
+
+        recommendedVideos.push(
+          ...videos
+        );
+
+      }
+
+      // =========================
+      // REMOVE DUPLICATE REELS
+      // =========================
+
+      const uniqueReels =
+
+        Array.from(
+
+          new Map(
+
+            recommendedReels.map(
+              (item) => [
+
+                item._id.toString(),
+
+                item,
+
+              ]
+            )
+
+          ).values()
+
+        );
+
+      // =========================
+      // REMOVE DUPLICATE VIDEOS
+      // =========================
+
+      const uniqueVideos =
+
+        Array.from(
+
+          new Map(
+
+            recommendedVideos.map(
+              (item) => [
+
+                item._id.toString(),
+
+                item,
+
+              ]
+            )
+
+          ).values()
+
+        );
+
+      // =========================
+      // SAVE FOR YOU FEED
+      // =========================
+
+      await User.findByIdAndUpdate(
+
+        user,
+
+        {
+
+          forYouReels:
+
+            uniqueReels.map(
+              (item) =>
+                item._id
+            ),
+
+          forYouVideos:
+
+            uniqueVideos.map(
+              (item) =>
+                item._id
+            ),
+
+          feedType:
+            "For You",
+
+        }
+
+      );
 
       // =========================
       // RESPONSE
@@ -619,6 +456,8 @@ exports.submitTest =
 
         result: {
 
+          attemptNumber,
+
           totalQuestions,
 
           correctAnswers:
@@ -627,12 +466,50 @@ exports.submitTest =
           wrongAnswers:
             wrong,
 
-          score:
-            score,
+          score,
 
           percentage,
 
         },
+
+        // =====================
+        // WEAK AREAS
+        // =====================
+
+        weakAreas:
+
+          weakTopics.map(
+            (item) => ({
+
+              subject:
+                item.subject,
+
+              chapter:
+                item.chapter,
+
+              topic:
+                item.topic,
+
+            })
+          ),
+
+        // =====================
+        // RECOMMENDED REELS
+        // =====================
+
+        recommendedReels:
+          uniqueReels,
+
+        // =====================
+        // RECOMMENDED VIDEOS
+        // =====================
+
+        recommendedVideos:
+          uniqueVideos,
+
+        // =====================
+        // FULL ATTEMPT
+        // =====================
 
         attempt,
 
@@ -688,9 +565,17 @@ exports.getMyAttempts =
                 path: "teacher",
               },
 
+              {
+                path: "category",
+              },
+
             ],
 
           })
+
+          .populate(
+            "answers.question"
+          )
 
           .sort({
 
@@ -756,6 +641,10 @@ exports.getSingleAttempt =
 
               {
                 path: "teacher",
+              },
+
+              {
+                path: "category",
               },
 
             ],
@@ -842,12 +731,18 @@ exports.getPerformanceAnalysis =
         for (const ans of attempt.answers) {
 
           // =====================
-          // SUBJECT ANALYSIS
+          // SUBJECT
           // =====================
 
-          if (!subjectStats[ans.subject]) {
+          if (
+            !subjectStats[
+              ans.subject
+            ]
+          ) {
 
-            subjectStats[ans.subject] = {
+            subjectStats[
+              ans.subject
+            ] = {
 
               total: 0,
               correct: 0,
@@ -859,29 +754,35 @@ exports.getPerformanceAnalysis =
 
           subjectStats[
             ans.subject
-          ].total += 1;
+          ].total++;
 
           if (ans.isCorrect) {
 
             subjectStats[
               ans.subject
-            ].correct += 1;
+            ].correct++;
 
           } else {
 
             subjectStats[
               ans.subject
-            ].wrong += 1;
+            ].wrong++;
 
           }
 
           // =====================
-          // CHAPTER ANALYSIS
+          // CHAPTER
           // =====================
 
-          if (!chapterStats[ans.chapter]) {
+          if (
+            !chapterStats[
+              ans.chapter
+            ]
+          ) {
 
-            chapterStats[ans.chapter] = {
+            chapterStats[
+              ans.chapter
+            ] = {
 
               total: 0,
               correct: 0,
@@ -893,29 +794,35 @@ exports.getPerformanceAnalysis =
 
           chapterStats[
             ans.chapter
-          ].total += 1;
+          ].total++;
 
           if (ans.isCorrect) {
 
             chapterStats[
               ans.chapter
-            ].correct += 1;
+            ].correct++;
 
           } else {
 
             chapterStats[
               ans.chapter
-            ].wrong += 1;
+            ].wrong++;
 
           }
 
           // =====================
-          // TOPIC ANALYSIS
+          // TOPIC
           // =====================
 
-          if (!topicStats[ans.topic]) {
+          if (
+            !topicStats[
+              ans.topic
+            ]
+          ) {
 
-            topicStats[ans.topic] = {
+            topicStats[
+              ans.topic
+            ] = {
 
               total: 0,
               correct: 0,
@@ -927,19 +834,19 @@ exports.getPerformanceAnalysis =
 
           topicStats[
             ans.topic
-          ].total += 1;
+          ].total++;
 
           if (ans.isCorrect) {
 
             topicStats[
               ans.topic
-            ].correct += 1;
+            ].correct++;
 
           } else {
 
             topicStats[
               ans.topic
-            ].wrong += 1;
+            ].wrong++;
 
           }
 
@@ -948,142 +855,137 @@ exports.getPerformanceAnalysis =
       }
 
       // =========================
-      // SUBJECT RESULT
+      // SUBJECT ANALYSIS
       // =========================
 
       const subjectAnalysis =
 
-        Object.keys(subjectStats)
+        Object.keys(
+          subjectStats
+        ).map((key) => {
 
-          .map((key) => {
+          const data =
+            subjectStats[key];
 
-            const data =
-              subjectStats[key];
+          const accuracy =
+            (
+              (
+                data.correct /
+                data.total
+              ) * 100
+            ).toFixed(2);
 
-            return {
+          return {
 
-              subject: key,
+            subject: key,
 
-              total:
-                data.total,
+            total:
+              data.total,
 
-              correct:
-                data.correct,
+            correct:
+              data.correct,
 
-              wrong:
-                data.wrong,
+            wrong:
+              data.wrong,
 
-              accuracy:
-                (
-                  (
-                    data.correct /
-                    data.total
-                  ) * 100
-                ).toFixed(2),
+            accuracy,
 
-              weak:
-                (
-                  (
-                    data.correct /
-                    data.total
-                  ) * 100
-                ) < 60,
+            weak:
+              accuracy < 60,
 
-            };
+          };
 
-          });
+        });
 
       // =========================
-      // CHAPTER RESULT
+      // CHAPTER ANALYSIS
       // =========================
 
       const chapterAnalysis =
 
-        Object.keys(chapterStats)
+        Object.keys(
+          chapterStats
+        ).map((key) => {
 
-          .map((key) => {
+          const data =
+            chapterStats[key];
 
-            const data =
-              chapterStats[key];
+          const accuracy =
+            (
+              (
+                data.correct /
+                data.total
+              ) * 100
+            ).toFixed(2);
 
-            return {
+          return {
 
-              chapter: key,
+            chapter: key,
 
-              total:
-                data.total,
+            total:
+              data.total,
 
-              correct:
-                data.correct,
+            correct:
+              data.correct,
 
-              wrong:
-                data.wrong,
+            wrong:
+              data.wrong,
 
-              accuracy:
-                (
-                  (
-                    data.correct /
-                    data.total
-                  ) * 100
-                ).toFixed(2),
+            accuracy,
 
-              weak:
-                (
-                  (
-                    data.correct /
-                    data.total
-                  ) * 100
-                ) < 60,
+            weak:
+              accuracy < 60,
 
-            };
+          };
 
-          });
+        });
 
       // =========================
-      // TOPIC RESULT
+      // TOPIC ANALYSIS
       // =========================
 
       const topicAnalysis =
 
-        Object.keys(topicStats)
+        Object.keys(
+          topicStats
+        ).map((key) => {
 
-          .map((key) => {
+          const data =
+            topicStats[key];
 
-            const data =
-              topicStats[key];
+          const accuracy =
+            (
+              (
+                data.correct /
+                data.total
+              ) * 100
+            ).toFixed(2);
 
-            return {
+          return {
 
-              topic: key,
+            topic: key,
 
-              total:
-                data.total,
+            total:
+              data.total,
 
-              correct:
-                data.correct,
+            correct:
+              data.correct,
 
-              wrong:
-                data.wrong,
+            wrong:
+              data.wrong,
 
-              accuracy:
-                (
-                  (
-                    data.correct /
-                    data.total
-                  ) * 100
-                ).toFixed(2),
+            accuracy,
 
-              weak:
-                (
-                  (
-                    data.correct /
-                    data.total
-                  ) * 100
-                ) < 60,
+            weak:
+              accuracy < 60,
 
-            };
+          };
 
-          });
+        });
+
+      // =========================
+      // RESPONSE
+      // =========================
 
       res.status(200).json({
 
@@ -1116,3 +1018,4 @@ exports.getPerformanceAnalysis =
     }
 
   };
+

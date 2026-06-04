@@ -1,34 +1,118 @@
-const express = require("express");
+// const express = require("express");
+// const router = express.Router();
 
-const router = express.Router();
+// const {
+//   createTeacher,
+//   getTeachers,
+// } = require("../controllers/teacherController");
+
+// router.post("/create", createTeacher);
+
+// router.get("/", getTeachers);
+
+// module.exports = router;
+
+
+const express =
+  require("express");
+
+const router =
+  express.Router();
 
 const {
-    createTeacher,
-    getTeachers,
-    getSingleTeacher,
-    updateTeacher,
-    deleteTeacher,
-} = require("../controllers/teacherController");
+
+  createTeacher,
+
+  getTeachers,
+
+  getSingleTeacher,
+
+  updateTeacher,
+
+  deleteTeacher,
+
+} = require(
+
+  "../controllers/teacherController"
+
+);
 
 
-// Create Teacher
-router.post("/create", createTeacher);
+
+// ======================================
+// CREATE TEACHER
+// ======================================
+
+router.post(
+
+  "/create",
+
+  createTeacher
+
+);
 
 
-// Get All Teachers
-router.get("/", getTeachers);
+
+// ======================================
+// GET ALL TEACHERS
+// ======================================
+
+router.get(
+
+  "/",
+
+  getTeachers
+
+);
 
 
-// Get Single Teacher
-router.get("/:id", getSingleTeacher);
+
+// ======================================
+// GET SINGLE TEACHER
+// ======================================
+
+router.get(
+
+  "/:id",
+
+  getSingleTeacher
+
+);
 
 
-// Update Teacher
-router.put("/:id", updateTeacher);
+
+// ======================================
+// UPDATE TEACHER
+// ======================================
+
+router.put(
+
+  "/:id",
+
+  updateTeacher
+
+);
 
 
-// Delete Teacher
-router.delete("/:id", deleteTeacher);
+
+// ======================================
+// DELETE TEACHER
+// ======================================
+
+router.delete(
+
+  "/:id",
+
+  deleteTeacher
+
+);
 
 
-module.exports = router;
+
+// ======================================
+// EXPORT
+// ======================================
+
+module.exports =
+  router;
+
