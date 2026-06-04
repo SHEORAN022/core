@@ -490,6 +490,109 @@
 //   };
 
 
+// // ======================================
+// // GET ALL ADMINS
+// // ======================================
+
+// exports.getAdmins =
+//   async (req, res) => {
+
+//     try {
+
+//       const admins =
+//         await Admin.find()
+
+//         .select("-password")
+
+//         .sort({
+//           createdAt: -1,
+//         });
+
+//       res.status(200).json({
+
+//         success: true,
+
+//         count:
+//           admins.length,
+
+//         admins,
+
+//       });
+
+//     } catch (error) {
+
+//       console.log(error);
+
+//       res.status(500).json({
+
+//         success: false,
+
+//         message:
+//           error.message,
+
+//       });
+
+//     }
+
+//   };
+
+
+
+// // ======================================
+// // GET SINGLE ADMIN
+// // ======================================
+
+// exports.getSingleAdmin =
+//   async (req, res) => {
+
+//     try {
+
+//       const admin =
+//         await Admin.findById(
+
+//           req.params.id
+
+//         ).select("-password");
+
+//       if (!admin) {
+
+//         return res.status(404).json({
+
+//           success: false,
+
+//           message:
+//             "Admin not found",
+
+//         });
+
+//       }
+
+//       res.status(200).json({
+
+//         success: true,
+
+//         admin,
+
+//       });
+
+//     } catch (error) {
+
+//       console.log(error);
+
+//       res.status(500).json({
+
+//         success: false,
+
+//         message:
+//           error.message,
+
+//       });
+
+//     }
+
+//   };
+
+
 const Admin =
   require("../models/Admin");
 
@@ -1083,4 +1186,165 @@ exports.getSingleAdmin =
     }
 
   };
+
+// ======================================
+// UPDATE ADMIN
+// ======================================
+
+exports.updateAdmin =
+  async (req, res) => {
+
+    try {
+
+      const {
+        name,
+        email,
+        role,
+        password,
+      } = req.body;
+
+      const admin =
+        await Admin.findById(
+          req.params.id
+        );
+
+      if (!admin) {
+
+        return res.status(404).json({
+
+          success: false,
+
+          message:
+            "Admin not found",
+
+        });
+
+      }
+
+      // UPDATE FIELDS
+
+      if (name)
+        admin.name = name;
+
+      if (email)
+        admin.email = email;
+
+      if (role)
+        admin.role = role;
+
+      // UPDATE PASSWORD
+
+      if (password) {
+
+        admin.password =
+          await bcrypt.hash(
+            password,
+            10
+          );
+
+      }
+
+      await admin.save();
+
+      res.status(200).json({
+
+        success: true,
+
+        message:
+          "Admin updated successfully",
+
+        admin: {
+
+          id:
+            admin._id,
+
+          name:
+            admin.name,
+
+          email:
+            admin.email,
+
+          role:
+            admin.role,
+
+        },
+
+      });
+
+    } catch (error) {
+
+      console.log(error);
+
+      res.status(500).json({
+
+        success: false,
+
+        message:
+          error.message,
+
+      });
+
+    }
+
+  };
+
+
+
+// ======================================
+// DELETE ADMIN
+// ======================================
+
+exports.deleteAdmin =
+  async (req, res) => {
+
+    try {
+
+      const admin =
+        await Admin.findById(
+          req.params.id
+        );
+
+      if (!admin) {
+
+        return res.status(404).json({
+
+          success: false,
+
+          message:
+            "Admin not found",
+
+        });
+
+      }
+
+      await Admin.findByIdAndDelete(
+        req.params.id
+      );
+
+      res.status(200).json({
+
+        success: true,
+
+        message:
+          "Admin deleted successfully",
+
+      });
+
+    } catch (error) {
+
+      console.log(error);
+
+      res.status(500).json({
+
+        success: false,
+
+        message:
+          error.message,
+
+      });
+
+    }
+
+  };
+
 
