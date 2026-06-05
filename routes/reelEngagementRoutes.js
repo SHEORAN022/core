@@ -41,6 +41,7 @@
 //   addShare,
 //   fetchComments,
 //   fetchReelStats,
+//     downloadReel,
 // } = require("../controllers/reelEngagementController");
 
 
@@ -57,6 +58,11 @@
 
 //   addView
 
+// );
+// router.get(
+//   "/download/:reelId",
+//   userAuth,
+//   downloadReel
 // );
 
 
@@ -174,6 +180,7 @@
 //   router;
 
 
+
 const express =
   require("express");
 
@@ -213,6 +220,9 @@ const {
   unlikeReel,
   addComment,
   toggleSave,
+    saveReel,
+      getSavedReels,
+  unsaveReel,
   addShare,
   fetchComments,
   fetchReelStats,
@@ -291,16 +301,33 @@ router.post(
 // SAVE / UNSAVE
 // ======================================
 
+// router.post(
+
+//   "/save/:reelId",
+
+//   userAuth,
+
+//   toggleSave
+
+// );
+
 router.post(
-
   "/save/:reelId",
-
   userAuth,
-
-  toggleSave
-
+  saveReel
 );
 
+router.delete(
+  "/unsave/:reelId",
+  userAuth,
+  unsaveReel
+);
+
+router.get(
+  "/saved-reels",
+  userAuth,
+  getSavedReels
+);
 
 
 // ======================================
@@ -353,5 +380,6 @@ router.get(
 
 module.exports =
   router;
+
 
 
